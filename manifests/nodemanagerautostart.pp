@@ -13,6 +13,7 @@ define orautils::nodemanagerautostart(
   $custom_trust              = false,
   $trust_keystore_file       = undef,
   $trust_keystore_passphrase = undef,
+  $custom_script_dir         = undef,
 ){
   case $version {
     1036, 1111, 1211 :{
@@ -57,7 +58,9 @@ define orautils::nodemanagerautostart(
     $trust_env = ''
   }
 
-  if ($::operatingsystem in ['CentOS','RedHat','OracleLinux'] and $::operatingsystemmajrelease == '7') {
+  if $custom_script_dir {
+    $location = "${custom_script_dir}/${scriptName}"
+  } elsif ($::operatingsystem in ['CentOS','RedHat','OracleLinux'] and $::operatingsystemmajrelease == '7') {
     $location = "/home/${user}/${scriptName}"
   } else {
     $location = "/etc/init.d/${scriptName}"
